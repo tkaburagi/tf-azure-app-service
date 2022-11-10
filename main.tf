@@ -1,6 +1,14 @@
 terraform {
-
+	backend "remote" {
+		hostname = "app.terraform.io"
+		organization = "tkaburagi"
+		workspaces {
+			name = "azure-app-service-ddd"
+		}
+	}
 }
+
+
 
 provider "azurerm" {
 	features {}
@@ -30,5 +38,11 @@ resource "azurerm_app_service" "my-app-service" {
 
 	app_settings = {
 		"WEBSITE_HEALTHCHECK_MAXPINGFAILURES" = 10
+	}
+
+	lifecycle {
+		ignore_changes = [
+			app_settings,
+		]
 	}
 }
